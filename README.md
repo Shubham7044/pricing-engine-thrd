@@ -134,7 +134,3 @@ Minimum margin check: 500 × 1.2 = 600.00
 Shubham Swarnakar
 Final Year B.Tech CSE (AI & ML)
 Making data work for better pricing decisions.
-
-vbnet
-Copy
-Edit
