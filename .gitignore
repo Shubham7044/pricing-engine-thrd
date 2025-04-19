@@ -1,0 +1,9 @@
+# Ignore Python cache and virtual environment
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Ignore output files
+updated_prices.csv
+updated_prices_data.csv
