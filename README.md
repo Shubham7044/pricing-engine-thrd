@@ -21,100 +21,100 @@ The goal is to optimize pricing dynamically to reflect real-world supply and dem
 - Used **Tableau** for product performance visualizations
 
 ---
-📂 Project Structure
-Copy
-Edit
-pricing_engine_project/
-├── products.csv
-├── sales.csv
-├── updated_prices.csv
-├── updated_prices_data.txt
-├── pricing_engine.py
-└── README.md
-🧠 Approach
-The script uses pandas for efficient data handling and tabulate for clean tabular formatting in the .txt output.
+pricing_engine_project/ ├── products.csv ├── sales.csv ├── updated_prices.csv ├── updated_prices_data.csv ├── pricing_engine.py └── README.md
 
-🔁 Pricing Rules (Applied in Priority)
-Rule 1 – Low Stock, High Demand
+markdown
+Copy code
 
-stock < 20 and quantity_sold > 30 → Increase price by 15%
+---
 
-Rule 2 – Dead Stock
+## 🧠 Approach
 
-stock > 200 and quantity_sold == 0 → Decrease price by 30%
+The engine reads product and sales data from CSV files using `pandas`. For each product, it applies a set of prioritized pricing rules and ensures a minimum profit margin before writing the results back to a new CSV file.
 
-Rule 3 – Overstocked Inventory
+### 🔁 Pricing Rules (Applied in Order of Priority)
 
-stock > 100 and quantity_sold < 20 → Decrease price by 10%
+1. **Rule 1 – Low Stock, High Demand**
+   - **Condition:** `stock < 20` and `quantity_sold > 30`
+   - **Action:** Increase price by **15%**
 
-Rule 4 – Minimum Profit Enforcement
+2. **Rule 2 – Dead Stock**
+   - **Condition:** `stock > 200` and `quantity_sold == 0`
+   - **Action:** Decrease price by **30%**
 
-Ensure price ≥ cost_price * 1.2 (minimum 20% margin)
+3. **Rule 3 – Overstocked Inventory**
+   - **Condition:** `stock > 100` and `quantity_sold < 20`
+   - **Action:** Decrease price by **10%**
 
-✅ Only the first matching rule (1–3) is applied. Rule 4 is always applied.
+4. **Rule 4 – Minimum Profit Constraint**
+   - **Condition:** Ensure final price is at least 20% above `cost_price`
+   - **Action:** If below, reset to `cost_price * 1.2`
 
-📊 Input Files
-products.csv – Product data: SKU, name, current price, cost, stock
+✅ Only the **first applicable rule (1–3)** is applied, followed by **Rule 4** in every case. Final price is **rounded to 2 decimal places**.
 
-sales.csv – SKU-wise quantity sold in the last 30 days
+---
 
-📤 Output Files
-updated_prices.csv
-➤ Columns: sku, old_price (INR), new_price (INR)
-➤ Includes prices with INR units and 2 decimal places.
+## 📥 Input Files
 
-updated_prices_data.txt
-➤ Nicely formatted human-readable table using tabulate.
+- `products.csv`: Product catalog including `sku`, `name`, `current_price`, `cost_price`, and `stock`
+- `sales.csv`: Last 30 days of sales performance for each SKU
 
-💻 How to Run the Project
-1. 🔧 Set Up Python Virtual Environment
-bash
-Copy
-Edit
+---
+
+## 📤 Output Files
+
+1. **`updated_prices.csv`**
+   - Contains `sku`, `old_price (INR)`, `new_price (INR)`
+   - Includes appropriate units (`INR`) and 2 decimal precision
+
+2. **`updated_prices_data.csv`**
+   - (Optional) Contains extended data with intermediary calculations
+
+---
+
+## 💻 How to Run
+
+### 🔧 Step 1: Set Up Python Virtual Environment
+
+```bash
 python3 -m venv venv
-source venv/bin/activate     # On Windows: venv\Scripts\activate
-2. 📦 Install Required Libraries
+source venv/bin/activate    # On Windows: venv\\Scripts\\activate
+📦 Step 2: Install Dependencies
 bash
-Copy
-Edit
+Copy code
 pip install pandas tabulate
-3. 🚀 Run the Script
-Make sure products.csv and sales.csv are in the same folder as pricing_engine.py.
-
+🚀 Step 3: Run the Script
 bash
-Copy
-Edit
+Copy code
 python pricing_engine.py
-📁 Sample Output (updated_prices.csv)
+Ensure products.csv and sales.csv are in the same directory as the script.
 
+✅ Sample Output (updated_prices.csv)
 sku	old_price (INR)	new_price (INR)
 A123	649.99 INR	600.00 INR
 B456	699.00 INR	803.85 INR
 C789	999.00 INR	699.30 INR
-✅ Prices are rounded to 2 decimal places and include INR as unit.
+📌 Assumptions
+If a product is missing in sales.csv, it's assumed to have quantity_sold = 0
 
-✅ Assumptions
-If a SKU in products.csv is not found in sales.csv, quantity_sold is assumed to be 0.
+Prices are adjusted only using the first applicable rule
 
-All monetary values are handled in INR and suffixed appropriately in output.
+The output enforces a minimum 20% profit margin above cost
 
-Price adjustments follow the first applicable rule only, except Rule 4 which is always enforced.
+Prices include currency unit (INR) and are rounded to 2 decimal places
 
-Script is robust to handle large product catalogs via vectorized pandas operations.
+Script can scale to large product lists using efficient pandas operations
 
-🛠️ Example: SKU A123
-Current price: 649.99
+🛠️ Example Calculation (SKU: A123)
+current_price = 649.99
 
-Stock: 150, Sales: 10
+stock = 150, quantity_sold = 10
 
 Rule 3 applies (overstocked) → 649.99 × 0.9 = 584.99
 
-Minimum profit: 500 × 1.2 = 600.00
+Minimum margin check: 500 × 1.2 = 600.00
 
-Final price: 600.00 INR
-
-
-
+✅ Final price = 600.00 INR
 ---
 
 ## 👨‍💻 Author
