@@ -88,14 +88,8 @@ The engine reads product and sales data from CSV files using `pandas`. For each 
 python3 -m venv venv
 source venv/bin/activate       # On Windows: venv\Scripts\activate
 📦 Step 2: Install Dependencies
-bash
-Copy
-Edit
 pip install pandas tabulate
 🚀 Step 3: Run the Script
-bash
-Copy
-Edit
 python pricing_engine.py
 📂 Make sure products.csv and sales.csv are in the same directory as the script.
 
